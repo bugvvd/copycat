@@ -3,34 +3,49 @@ import { fetchCount } from "../features/counter/counterAPI";
 let currentState = 0;
 let currentListeners = [];
 
-const store = {
-    getState: ()=>{
-        return currentState
-    },
-    addByOne: ()=>{
-        currentState++;
-        currentListeners.forEach(listener => listener(currentState))
-    },
-    minusByOne: ()=>{
-        currentState--
-        currentListeners.forEach(listener => listener(currentState))
-    },
-    addByValue: (value) =>{
-        currentState += value;
-        currentListeners.forEach(listener => listener(currentState))
-    },
-    addIfOdd: (amount)=>{
-        if (currentState % 2 !== 0) currentListeners += amount;
-        currentListeners.forEach(listener => listener(currentState))
-    },
-    asyncAddByValue: async (value)=>{
-        const response = await fetchCount(value);
-        currentState += response.data;
-        currentListeners.forEach(listener => listener(currentState))
-    },
-    subscribe: (listener)=>{
-        currentListeners.push(listener);
-    }
-}
+const getState = () => {
+  return currentState;
+};
 
-export default store
+const setter = async (type, value) => {
+  switch (type) {
+    case "addByOne":
+      currentState++;
+      break;
+    case "minusByOne":
+      currentState--;
+      break;
+    case "addByValue":
+      currentState += value;
+      break;
+    case "addIfOdd":
+      if (currentState % 2 !== 0) {
+        currentState += value;
+      }
+      break;
+    case "asyncAddByValue":
+      const response = await fetchCount(value);
+      currentState += response.data;
+      break;
+    default:
+      return;
+  }
+};
+
+const callSetter = async (type, value) => {
+  await setter(type, value);
+  console.log(currentState);
+  currentListeners.forEach((listener) => listener(currentState));
+};
+
+const subscribe = (listener) => {
+  currentListeners.push(listener);
+};
+
+const store = {
+  getState,
+  callSetter,
+  subscribe,
+};
+
+export default store;

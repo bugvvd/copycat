@@ -28,9 +28,7 @@ export function Counter() {
           className={styles.button}
           aria-label="Decrement value"
           // onClick={() => dispatch(decrement())}
-          onClick={() => {
-            store.minusByOne();
-          }}
+          onClick={() => store.callSetter("minusByOne")}
         >
           -
         </button>
@@ -39,9 +37,7 @@ export function Counter() {
           className={styles.button}
           aria-label="Increment value"
           // onClick={() => dispatch(increment())}
-          onClick={() => {
-            store.addByOne();
-          }}
+          onClick={() => store.callSetter("addByOne")}
         >
           +
         </button>
@@ -56,27 +52,21 @@ export function Counter() {
         <button
           className={styles.button}
           // onClick={() => dispatch(incrementByAmount(incrementValue))}
-          onClick={() => {
-            store.addByValue(incrementValue);
-          }}
+          onClick={() => store.callSetter("addByValue", incrementValue)}
         >
           Add Amount
         </button>
         <button
           className={styles.asyncButton}
           // onClick={() => dispatch(incrementAsync(incrementValue))}
-          onClick={() => {
-            store.asyncAddByValue(incrementValue);
-          }}
+          onClick={() => store.callSetter("asyncAddByValue", incrementValue)}
         >
           Add Async
         </button>
         <button
           className={styles.button}
           // onClick={() => dispatch(incrementIfOdd(incrementValue))}
-          onClick={() => {
-            store.addIfOdd(incrementValue);
-          }}
+          onClick={() => store.callSetter("addIfOdd", incrementValue)}
         >
           Add If Odd
         </button>
