@@ -1,51 +1,29 @@
+import createStore from "../redux-mini/createStore";
 import { fetchCount } from "../features/counter/counterAPI";
 
-let currentState = 0;
-let currentListeners = [];
-
-const getState = () => {
-  return currentState;
-};
-
-const setter = async (type, value) => {
+const setter = async (currentState, type, value) => {
   switch (type) {
     case "addByOne":
-      currentState++;
-      break;
+      return ++currentState;
     case "minusByOne":
-      currentState--;
-      break;
+      return --currentState;
     case "addByValue":
       currentState += value;
-      break;
+      return currentState;
     case "addIfOdd":
       if (currentState % 2 !== 0) {
         currentState += value;
       }
-      break;
+      return currentState;
     case "asyncAddByValue":
       const response = await fetchCount(value);
       currentState += response.data;
-      break;
+      return currentState;
     default:
       return;
   }
 };
 
-const callSetter = async (type, value) => {
-  await setter(type, value);
-  console.log(currentState);
-  currentListeners.forEach((listener) => listener(currentState));
-};
-
-const subscribe = (listener) => {
-  currentListeners.push(listener);
-};
-
-const store = {
-  getState,
-  callSetter,
-  subscribe,
-};
+const store = createStore(setter);
 
 export default store;
